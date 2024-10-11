@@ -1,9 +1,29 @@
-const iller_ilceler = require('../models/form_models/il_ilce');
-exports.getAllCitiesAndDistricts = async (req, res) => {
+const IlIlce = require('../models/form_models/il_ilce'); 
+
+const getAllCities = async (req, res) => {
     try {
-        const cities = await iller_ilceler.find(); 
-        res.status(200).json(cities);
+        const cities = await IlIlce.find({}, 'il'); 
+        res.json(cities);
     } catch (error) {
-        res.status(500).json({ message: 'Veriler alınırken bir hata oluştu.' });
+        res.status(500).json({ message: error.message });
     }
+};
+
+const getDistrictsByCity = async (req, res) => {
+    const { il } = req.params; 
+
+    try {
+        const cityData = await IlIlce.findOne({ il: il }); 
+        if (!cityData) {
+            return res.status(404).json({ message: 'City not found' });
+        }
+        res.json(cityData.ilceler);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = {
+    getAllCities,
+    getDistrictsByCity,
 };

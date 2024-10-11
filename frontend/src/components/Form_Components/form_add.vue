@@ -34,7 +34,20 @@
                 <input type="email" id="email" v-model="email" placeholder="E-posta" required />
             </div>
 
-           
+            <div class="form-group">
+                <label for="sehir">Şehir</label>
+                <select id="sehir" v-model="selectedCity" @change="updateDistricts" required>
+                    <option value="" disabled>Şehir Seçin</option>
+                    <option v-for="city in cities" :key="city" :value="city">{{ city }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="ilce">İlçe</label>
+                <select id="ilce" v-model="selectedDistrict" required>
+                    <option value="" disabled>İlçe Seçin</option>
+                    <option v-for="district in districts[selectedCity]" :key="district" :value="district">{{ district }}</option>
+                </select>
+            </div>
 
             <div class="form-group">
                 <label for="adres">Adres</label>
@@ -57,7 +70,10 @@ export default {
             formattedPhone: '',
             email: '',
             selectedCity: '',
+            selectedDistrict: '', // Eklenen değişken
             address: '',
+            cities: [], // Şehirlerin listesi
+            districts: {} // İlçelerin listesi
         };
     },
     methods: {
@@ -72,6 +88,10 @@ export default {
                 this.formattedPhone = `(${match[1]}) ${match[2]} ${match[3]} ${match[4]}`;
             }
         },
+        updateDistricts() {
+            // Şehre göre ilçeleri güncelle
+            this.selectedDistrict = ''; // Seçimi sıfırla
+        },
         async handleSubmit() {
             try {
                 const formData = {
@@ -81,8 +101,11 @@ export default {
                     gender: this.gender,
                     phone: this.formattedPhone.replace(/\D/g, ''),
                     email: this.email,
+                    city: this.selectedCity, // Eklenen şehir
+                    district: this.selectedDistrict, // Eklenen ilçe
                     address: this.address
                 };
+                
                 const response = await axios.post('http://localhost:5000/api/users', formData);
                 alert('Form başarıyla gönderildi! Yanıt: ' + response.data._id);
             } catch (error) {
@@ -92,6 +115,7 @@ export default {
     }
 };
 </script>
+
 
 <style scoped>
 .form-container {
