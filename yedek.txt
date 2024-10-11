@@ -1,0 +1,11 @@
+// var express = require('express');
+// var app = express();
+
+// app.get("/", function(req, res){
+//     res.send('naber müdür')
+// });
+
+
+// var server = app.listen(5000, function(){
+//     console.log("express server  http://127.0.0.1:5000/ de dinleniyor"); //burada get isteğini verdik aslında 
+// })

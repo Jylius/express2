@@ -33,13 +33,22 @@
                 <label for="email">E-posta</label>
                 <input type="email" id="email" v-model="email" placeholder="E-posta" required />
             </div>
+
             <div class="form-group">
                 <label for="sehir">Şehir</label>
-                <select id="sehir" v-model="selectedCity" required>
+                <select id="sehir" v-model="selectedCity" @change="updateDistricts" required>
                     <option value="" disabled>Şehir Seçin</option>
                     <option v-for="city in cities" :key="city" :value="city">{{ city }}</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label for="ilce">İlçe</label>
+                <select id="ilce" v-model="selectedDistrict" required>
+                    <option value="" disabled>İlçe Seçin</option>
+                    <option v-for="district in districts[selectedCity]" :key="district" :value="district">{{ district }}</option>
+                </select>
+            </div>
+
             <div class="form-group">
                 <label for="adres">Adres</label>
                 <input type="text" id="adres" v-model="address" placeholder="Adres" required />

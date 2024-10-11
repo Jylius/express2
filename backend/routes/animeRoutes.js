@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const animes = await Anime.find();  
+        const animes = await Anime.find();
         res.json(animes);
     } catch (err) {
         res.status(500).json({ message: err.message });
