@@ -34,20 +34,7 @@
                 <input type="email" id="email" v-model="email" placeholder="E-posta" required />
             </div>
 
-            <div class="form-group">
-                <label for="sehir">Şehir</label>
-                <select id="sehir" v-model="selectedCity" @change="updateDistricts" required>
-                    <option value="" disabled>Şehir Seçin</option>
-                    <option v-for="city in cities" :key="city" :value="city">{{ city }}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="ilce">İlçe</label>
-                <select id="ilce" v-model="selectedDistrict" required>
-                    <option value="" disabled>İlçe Seçin</option>
-                    <option v-for="district in districts[selectedCity]" :key="district" :value="district">{{ district }}</option>
-                </select>
-            </div>
+           
 
             <div class="form-group">
                 <label for="adres">Adres</label>
@@ -71,7 +58,6 @@ export default {
             email: '',
             selectedCity: '',
             address: '',
-            cities: ['İstanbul', 'Ankara', 'İzmir', 'Bursa', 'Adana', 'Antalya', 'Konya', 'Kayseri', 'Gaziantep', 'Mersin']
         };
     },
     methods: {
@@ -95,7 +81,6 @@ export default {
                     gender: this.gender,
                     phone: this.formattedPhone.replace(/\D/g, ''),
                     email: this.email,
-                    city: this.selectedCity,
                     address: this.address
                 };
                 const response = await axios.post('http://localhost:5000/api/users', formData);
