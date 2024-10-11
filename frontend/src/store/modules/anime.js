@@ -35,7 +35,7 @@ const actions = {
 };
 
 export default {
-  namespaced: true, // Burayı ekleyin
+  namespaced: true,
   state,
   getters,
   mutations,

@@ -1,13 +1,13 @@
 <template>
-  <Kafadaki_sey></Kafadaki_sey>
+  <Hed_Navbar></Hed_Navbar>
   <router-view/>
 </template>
 
 <script>
-import Kafadaki_sey from './components/kafadaki_sey.vue';
+import Hed_Navbar from './components/Hed_Navbar.vue';
 export default{
   components:{
-    Kafadaki_sey
+    Hed_Navbar
   }
 }
 </script>

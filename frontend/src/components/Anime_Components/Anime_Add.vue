@@ -17,7 +17,6 @@
       <div class="form-group">
         <label for="animeImage">Image Upload</label>
         <input type="file" @change="onFileChange" accept="image/*" required />
-       
       </div>
       <div class="form-group">
         <label for="animeCreator">Creator</label>
@@ -111,7 +110,6 @@ export default {
       this.animeStudio = '';
       this.animeYear = '';
       this.animeChapters = '';
-      this.imagePreview = '';
     },
     onFileChange(event) {
       const file = event.target.files[0];

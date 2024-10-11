@@ -10,11 +10,10 @@ app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:8080'
 }));
-/*
-app.use((req, res)=>{
-    res.status(404).send('<h1>buralara bakma bozarsın</h1>');
-})
-*/
+// app.use((req, res)=>{
+//     res.status(404).send('<h1>buralara bakma bozarsın</h1>');
+//     // sadece 404 veriyor sayfaya yani kullanmasanda olur
+// });
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB bağlantısı başarılı'))
     .catch((err) => console.error('MongoDB bağlantı hatası:', err));
