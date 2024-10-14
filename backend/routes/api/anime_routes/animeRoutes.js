@@ -1,5 +1,5 @@
 const express = require('express');
-const Anime = require('../models/Anime');
+const Anime = require('../../../models/Anime');
 
 const router = express.Router();
 

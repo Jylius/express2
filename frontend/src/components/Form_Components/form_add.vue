@@ -12,7 +12,7 @@
             </div>
             <div class="form-group">
                 <label for="dogum-tarihi">Doğum Tarihi</label>
-                <input type="date" id="dogum-tarihi" v-model="birthDate" required />
+                <input type="date" id="dogum-tarihi"  v-model="birthDate" :max="maxDate" @input="validateDate" required />
             </div>
             <div class="form-group">
                 <label>Cinsiyet</label>
@@ -24,6 +24,11 @@
                         <input type="radio" name="cinsiyet" value="kadin" v-model="gender" required /> Kadın
                     </label>
                 </div>
+            </div>
+            <div class="form-group">
+                <label for="tcno">TC Kimlik No</label>
+                <input type="text" id="tcno" v-model="tcno" placeholder="TC Kimlik No" maxlength="11" required @input="validateTCNo" />
+                <span v-if="tcError" class="error">{{ tcError }}</span>
             </div>
             <div class="form-group">
                 <label for="telefon">Telefon</label>
@@ -70,13 +75,47 @@ export default {
             formattedPhone: '',
             email: '',
             selectedCity: '',
-            selectedDistrict: '', // Eklenen değişken
+            selectedDistrict: '',
             address: '',
-            cities: [], // Şehirlerin listesi
-            districts: {} // İlçelerin listesi
+            cities: [],
+            districts: {},
+            tcError:""
         };
     },
+    mounted(){
+        this.fetchCities();
+        this.setMaxDate();
+    },
     methods: {
+        validateTCNo() {
+            if (this.tcno.length !== 11) {
+                this.tcError = 'TC Kimlik No 11 haneli olmalıdır.';
+                return false;
+            }
+            this.tcError = this.tcKimlikKontrol(this.tcno) ? '' : 'Geçersiz TC Kimlik No.';
+        },
+
+        
+        tcKimlikKontrol(tcKimlik) {
+            if (!/^\d+$/.test(tcKimlik)) return false;
+
+            tcKimlik = tcKimlik.trim().replace(/^0+/, '');
+            
+            if (tcKimlik.length !== 11) return false;
+
+            let tekBasamaklar = 0;
+            let ciftBasamaklar = 0;
+            
+            for (let i = 0; i <= 8; i += 2) tekBasamaklar += parseInt(tcKimlik[i]);
+            for (let i = 1; i <= 7; i += 2) ciftBasamaklar += parseInt(tcKimlik[i]);
+            
+            if (((7 * tekBasamaklar) - ciftBasamaklar) % 10 !== parseInt(tcKimlik[9])) return false;
+
+            let toplam = 0;
+            for (let i = 0; i <= 9; i++) toplam += parseInt(tcKimlik[i]);
+            
+            return toplam % 10 === parseInt(tcKimlik[10]);
+        },
         validateName(field) {
             this[field] = this[field].replace(/[^a-zA-ZığüşöçİĞÜŞÖÇ\s]/g, '');
         },
@@ -88,30 +127,66 @@ export default {
                 this.formattedPhone = `(${match[1]}) ${match[2]} ${match[3]} ${match[4]}`;
             }
         },
-        updateDistricts() {
-            // Şehre göre ilçeleri güncelle
-            this.selectedDistrict = ''; // Seçimi sıfırla
-        },
-        async handleSubmit() {
-            try {
-                const formData = {
-                    firstName: this.firstName,
-                    lastName: this.lastName,
-                    birthDate: this.birthDate,
-                    gender: this.gender,
-                    phone: this.formattedPhone.replace(/\D/g, ''),
-                    email: this.email,
-                    city: this.selectedCity, // Eklenen şehir
-                    district: this.selectedDistrict, // Eklenen ilçe
-                    address: this.address
-                };
-                
-                const response = await axios.post('http://localhost:5000/api/users', formData);
-                alert('Form başarıyla gönderildi! Yanıt: ' + response.data._id);
-            } catch (error) {
-                console.error('Form gönderilemedi:', error);
-            }
+        setMaxDate(){
+      const today = new Date();
+      const day = String(today.getDate()).padStart(2,'0');
+      const month = String(today.getMonth()+1).padStart(2,'0');
+      const year = today.getFullYear();
+      this.maxDate = `${year}-${month}-${day}`
+    },
+    validateDate(event){
+      const inputDate= new Date(event.target.value)
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      if (inputDate > today) {
+        event.target.value = this.maxDate; 
+        this.animeYear = this.maxDate; 
+        alert('Lütfen bugünden önceki bir tarih girin.'); 
+    }
+  },
+
+
+        async fetchCities() {
+      try {
+        const response = await axios.get('http://localhost:5000/api/iller');
+        this.cities = response.data.map(city => city.il); 
+      } catch (error) {
+        console.error('Şehirler yüklenemedi:', error);
+      }
+    },
+    async updateDistricts() {
+      try {
+        if (this.selectedCity) {
+          const response = await axios.get(`http://localhost:5000/api/iller/${this.selectedCity}`);
+          this.districts[this.selectedCity] = response.data; 
         }
+        this.selectedDistrict = '';
+      } catch (error) {
+        console.error('İlçeler yüklenemedi:', error);
+      }
+    },
+    async handleSubmit() {
+      try {
+        const formData = {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          birthDate: this.birthDate,
+          gender: this.gender,
+          phone: this.formattedPhone.replace(/\D/g, ''),
+          tcno: this.tcno,
+          email: this.email,
+          city: this.selectedCity,
+          district: this.selectedDistrict,
+          address: this.address,
+        };
+        
+        const response = await axios.post('http://localhost:5000/api/users', formData);
+        alert('Form başarıyla gönderildi! Yanıt: ' + response.data._id);
+    } catch (error) {
+        console.error('Form gönderilemedi:', error);
+    }
+}
+
     }
 };
 </script>

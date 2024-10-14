@@ -2,7 +2,7 @@
     <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <router-link to="/" class="navbar-item">
-          <img src="https://bulma.io/images/bulma-logo.png" alt="Logo">
+          <h1>resim ekleyeceğim</h1>
         </router-link>
       </div>
   

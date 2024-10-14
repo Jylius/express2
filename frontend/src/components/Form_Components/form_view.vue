@@ -19,7 +19,8 @@
         <p><strong>Cinsiyet:</strong> {{ selectedUser.gender }}</p>
         <p><strong>Telefon:</strong> {{ selectedUser.phone }}</p>
         <p><strong>Email:</strong> {{ selectedUser.email }}</p>
-        <p><strong>Şehir:</strong> {{ selectedUser.city }}</p>
+        <p><strong>Şehir:</strong> {{ selectedUser.city }} </p>
+        <p><strong>İlçe:</strong> {{ selectedUser.district }}</p>
         <p><strong>Adres:</strong> {{ selectedUser.address }}</p>
         <button class="close-button" @click="selectedUser = null">Kapat</button>
       </div>

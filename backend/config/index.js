@@ -18,15 +18,6 @@ app.get('/', (req, res) => {
     res.send('Backend Çalışıyor!');
 });
 
-const ilIlceRoutes = require('./routes/api/form_routes/il_ilce_Routes');
-app.use('/api', ilIlceRoutes);
-
- const userRoutes = require('./routes/api/form_routes/userRoutes'); 
- app.use('/api/users', userRoutes);
-
-const animeRoutes = require('./routes/api/anime_routes/animeRoutes'); 
-app.use('/api/animes', animeRoutes);
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Sunucu ${PORT} portunda çalışıyor`);

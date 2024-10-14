@@ -6,10 +6,13 @@ const userSchema = new mongoose.Schema({
     birthDate: { type: Date, required: true },
     gender: { type: String, enum: ['erkek', 'kadin'], required: true },
     phone: { type: String, required: true },
+    tcno: { type: String, required: true },
     email: { type: String, required: true },
     city: { type: String, required: true },
+    district: { type: String, required: true }, 
     address: { type: String, required: true }
 });
+
 module.exports = mongoose.model('User', userSchema);
 
 //mongoose mongodb için kullanılan bir (object data modeling) kütüphanesidir.
