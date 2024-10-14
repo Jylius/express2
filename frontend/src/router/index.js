@@ -17,6 +17,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "anime" */ '../views/AnimeView.vue')
   },
   {
+    path: '/admin',
+    name: 'admin',
+    component: () => import(/* webpackChunkName: "admin" */ '../views/AdminDashboardView.vue')
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'notfound',
     component: () => import(/* webpackChunkName: "notfound" */ '../views/404NotFoundView.vue')
