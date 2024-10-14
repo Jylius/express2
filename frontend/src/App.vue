@@ -11,3 +11,106 @@ export default{
   }
 }
 </script>
+
+
+<style lang="scss">
+@import '@/styles/mixins';
+
+:root {
+  --variable-widget-margin: 24px;
+}
+
+[color-scheme='dark'] {
+  --color-primary: #86c232;
+  --color-primary-dark: #61892f;
+  --color-danger: #ff4646;
+  --color-danger-dark: #892f2f;
+  --color-gray: #474b4f;
+  --color-gray-light: #6b6e70;
+  --color-white: #fff;
+  --color-black: #000;
+  --color-main-text: #bfbfbf;
+  --color-header: #1f2529;
+  --color-bg: #1c2125;
+  --color-widget-bg: #272b2d;
+  --color-comments-animation: #7fbc3236;
+  --color-scrollbar: #f5f5f5;
+}
+
+html {
+  font-family: Roboto, 'Open Sans', Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  overflow-y: hidden;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-bg);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background-color: var(--color-gray-light);
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.content {
+  display: flex;
+  flex-grow: 1;
+  flex-flow: row nowrap;
+  width: 100%;
+  max-width: 1110px;
+  margin-top: 72px;
+  margin-right: auto;
+  margin-left: auto;
+
+  &__main {
+    flex: 1;
+    margin-right: var(--variable-widget-margin);
+
+    @include for-size(phone-only) {
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+
+  &__sidebar {
+    width: 26%;
+
+    @include for-size(phone-only) {
+      display: none;
+    }
+  }
+}
+</style>
