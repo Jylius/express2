@@ -11,6 +11,7 @@
           <router-link to="/" class="navbar-item">Home</router-link>
           <router-link to="/about" class="navbar-item">About</router-link>
           <router-link to="/anime" class="navbar-item">Animeler</router-link>
+          <router-link to="/admin" class="navbar-item">Admin</router-link>
         </div>
       </div>
     </nav>
