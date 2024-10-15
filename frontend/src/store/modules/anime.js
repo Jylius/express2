@@ -18,7 +18,6 @@ const mutations = {
     state.selectedAnime = anime;
   },
 };
-
 const actions = {
   async fetchAnimes({ commit }) {
     try {

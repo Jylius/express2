@@ -219,7 +219,7 @@ export default {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
   .user-list {
-    width: 30%;
+    width: 16%;
     border-right: 2px solid #ccc;
     padding-right: 15px;
   }
@@ -257,7 +257,7 @@ export default {
   input[type="date"],
   input[type="email"],
   input[type="radio"] {
-    width: 100%;
+    width: 40%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -268,6 +268,11 @@ export default {
   input[type="email"]:focus {
     border-color: #007bff;
     outline: none;
+  }
+  input[disabled]{
+    color:black;
+    font-size: large;
+    
   }
   .radio-group {
     display: flex;

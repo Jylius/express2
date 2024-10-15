@@ -1,159 +1,162 @@
 <template lang="tr">
-    <div class="form-container">
-      <h2>Başvuru Formu</h2>
-      <form @submit.prevent="handleSubmit">
-        <div class="form-group">
-          <label for="isim">İsim</label>
-          <input type="text" id="isim" v-model="firstName" @input="validateName('firstName')" placeholder="İsim" required />
+  <div class="form-container">
+    <h2>Başvuru Formu</h2>
+    <form @submit.prevent="handleSubmit">
+      <div class="form-group">
+        <label for="isim">İsim</label>
+        <input type="text" id="isim" v-model="firstName" @input="validateName('firstName')" placeholder="İsim" required />
+      </div>
+      <div class="form-group">
+        <label for="soyisim">Soyisim</label>
+        <input type="text" id="soyisim" v-model="lastName" @input="validateName('lastName')" placeholder="Soyisim" required />
+      </div>
+      <div class="form-group">
+        <label for="dogum-tarihi">Doğum Tarihi</label>
+        <input type="date" id="dogum-tarihi" v-model="birthDate" :max="maxDate" @input="validateDate" required />
+      </div>
+      <div class="form-group">
+        <label>Cinsiyet</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="cinsiyet" value="erkek" v-model="gender" required /> Erkek
+          </label>
+          <label>
+            <input type="radio" name="cinsiyet" value="kadin" v-model="gender" required /> Kadın
+          </label>
         </div>
-        <div class="form-group">
-          <label for="soyisim">Soyisim</label>
-          <input type="text" id="soyisim" v-model="lastName" @input="validateName('lastName')" placeholder="Soyisim" required />
-        </div>
-        <div class="form-group">
-          <label for="dogum-tarihi">Doğum Tarihi</label>
-          <input type="date" id="dogum-tarihi" v-model="birthDate" :max="maxDate" @input="validateDate" required />
-        </div>
-        <div class="form-group">
-          <label>Cinsiyet</label>
-          <div class="radio-group">
-            <label>
-              <input type="radio" name="cinsiyet" value="erkek" v-model="gender" required /> Erkek
-            </label>
-            <label>
-              <input type="radio" name="cinsiyet" value="kadin" v-model="gender" required /> Kadın
-            </label>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="tcno">TC Kimlik No</label>
-          <input type="text" id="tcno" v-model="tcno" placeholder="TC Kimlik No" maxlength="11" required @input="validateTCNo" />
-          <span v-if="tcError" class="error">{{ tcError }}</span>
-        </div>
-        <div class="form-group">
-          <label for="telefon">Telefon</label>
-          <input type="text" id="telefon" v-model="formattedPhone" @input="formatPhone" placeholder="(555) 123 4567" maxlength="14" required />
-        </div>
-        <div class="form-group">
-          <label for="email">E-posta</label>
-          <input type="email" id="email" v-model="email" placeholder="E-posta" required />
-        </div>
-        <div class="form-group">
-          <label for="sehir">Şehir</label>
-          <select id="sehir" v-model="selectedCity" @change="updateDistricts" required>
-            <option value="" disabled>Şehir Seçin</option>
-            <option v-for="city in cities" :key="city" :value="city">{{ city }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="ilce">İlçe</label>
-          <select id="ilce" v-model="selectedDistrict" required>
-            <option value="" disabled>İlçe Seçin</option>
-            <option v-for="district in districts[selectedCity]" :key="district" :value="district">{{ district }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="adres">Adres</label>
-          <input type="text" id="adres" v-model="address" placeholder="Adres" required />
-        </div>
-        <button type="submit" class="submit-button">Gönder</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  import '../../store/index'
-  import { ref, onMounted } from 'vue';
-  import { mapActions, mapGetters, mapMutations } from 'vuex';
-  
-  export default {
-    setup() {
-      
-      const firstName = ref('');
-      const lastName = ref('');
-      const birthDate = ref('');
-      const gender = ref('');
-      const tcno = ref('');
-      const formattedPhone = ref('');
-      const email = ref('');
-      const selectedCity = ref('');
-      const selectedDistrict = ref('');
-      const address = ref('');
-      const cities = ref([]);
-      const districts = ref({});
-      const maxDate = ref('');
-      const tcError = ref('');
-  
-      const { fetchCities, submitForm, fetchDistricts } = mapActions('User', ['fetchCities', 'submitForm', 'fetchDistricts']);
-      const { getCities, getDistricts } = mapGetters('User', ['getCities', 'getDistricts']);
-      const { setCities, setDistricts, setUser} = mapMutations('User',['setCities','setDistricts','setUser'])
-      onMounted(async () => {
-        await fetchCities();
-        setMaxDate();
-      });
-      const setMaxDate = () => {
-        const today = new Date().toISOString().split('T')[0];
-        maxDate.value = today;
+      </div>
+      <div class="form-group">
+        <label for="tcno">TC Kimlik No</label>
+        <input type="text" id="tcno" v-model="tcno" placeholder="TC Kimlik No" maxlength="11" required @input="validateTCNo" />
+        <span v-if="tcError" class="error">{{ tcError }}</span>
+      </div>
+      <div class="form-group">
+        <label for="telefon">Telefon</label>
+        <input type="text" id="telefon" v-model="formattedPhone" @input="formatPhone" placeholder="(555) 123 4567" maxlength="14" required />
+      </div>
+      <div class="form-group">
+        <label for="email">E-posta</label>
+        <input type="email" id="email" v-model="email" placeholder="E-posta" required />
+      </div>
+      <div class="form-group">
+        <label for="sehir">Şehir</label>
+        <select id="sehir" v-model="selectedCity" @change="updateDistricts" required>
+          <option value="" disabled>Şehir Seçin</option>
+          <option v-for="city in cities" :key="city" :value="city">{{ city }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="ilce">İlçe</label>
+        <select id="ilce" v-model="selectedDistrict" required>
+          <option value="" disabled>İlçe Seçin</option>
+          <option v-for="district in districts[selectedCity]" :key="district" :value="district">{{ district }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="adres">Adres</label>
+        <input type="text" id="adres" v-model="address" placeholder="Adres" required />
+      </div>
+      <button type="submit" class="submit-button">Gönder</button>
+    </form>
+  </div>
+</template>
+
+<script>
+import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
+
+export default {
+  setup() {
+    const store = useStore();
+
+    
+    const firstName = ref('');
+    const lastName = ref('');
+    const birthDate = ref('');
+    const gender = ref('');
+    const tcno = ref('');
+    const formattedPhone = ref('');
+    const email = ref('');
+    const selectedCity = ref('');
+    const selectedDistrict = ref('');
+    const address = ref('');
+    const maxDate = ref(new Date().toISOString().split('T')[0]); 
+    const tcError = ref('');
+    const cities = ref([]);
+    const districts = ref({}); 
+
+    const handleSubmit = async () => {
+      const formData = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        birthDate: birthDate.value,
+        gender: gender.value,
+        tcno: tcno.value,
+        formattedPhone: formattedPhone.value,
+        email: email.value,
+        selectedCity: selectedCity.value,
+        selectedDistrict: selectedDistrict.value,
+        address: address.value,
       };
-      const handleSubmit = async () => {
-        const formData = {
-          firstName: firstName.value,
-          lastName: lastName.value,
-          birthDate: birthDate.value,
-          gender: gender.value,
-          tcno: tcno.value,
-          formattedPhone: formattedPhone.value,
-          email: email.value,
-          selectedCity: selectedCity.value,
-          selectedDistrict: selectedDistrict.value,
-          address: address.value,
-        };
-  
-        try {
-          await submitForm(formData);
-          firstName.value = '';
-          lastName.value = '';
-          birthDate.value = '';
-          gender.value = '';
-          tcno.value = '';
-          formattedPhone.value = '';
-          email.value = '';
-          selectedCity.value = '';
-          selectedDistrict.value = '';
-          address.value = '';
-        } catch (error) {
-          console.error('Hata oluştu:', error);
-        }
-      };
-      return {
-        
-        firstName,
-        lastName,
-        birthDate,
-        gender,
-        tcno,
-        formattedPhone,
-        email,
-        selectedCity,
-        selectedDistrict,
-        address,
-        cities,
-        districts,
-        maxDate,
-        tcError,
-        handleSubmit,
-        fetchCities,
-        getCities,
-        fetchDistricts,
-        getDistricts,
-        setMaxDate,
-        setCities,
-        setDistricts,
-        setUser
-      };
-    },
-  };
-  </script>
+
+      try {
+        await store.dispatch('User/submitForm', formData);
+      } catch (error) {
+        console.error('Hata oluştu:', error);
+      }
+    };
+
+    const setMaxDate = () => {
+      const today = new Date();
+      maxDate.value = today.toISOString().split('T')[0]; 
+    };
+
+    onMounted(async () => {
+      await store.dispatch('User/fetchCities');
+      setMaxDate();
+    });
+    //eslint-disable-next-line
+    const validateName = (field) => {
+    };
+
+    const validateDate = () => {
+    };
+
+    const validateTCNo = () => {
+    };
+
+    const formatPhone = () => {
+    };
+
+    const updateDistricts = () => {
+    };
+
+    return {
+      firstName,
+      lastName,
+      birthDate,
+      gender,
+      tcno,
+      formattedPhone,
+      email,
+      selectedCity,
+      selectedDistrict,
+      address,
+      maxDate,
+      handleSubmit,
+      validateName,
+      validateDate,
+      validateTCNo,
+      formatPhone,
+      updateDistricts,
+      cities,
+      districts,
+      tcError,
+    };
+  },
+};
+</script>
+
   
 <style scoped>
 
