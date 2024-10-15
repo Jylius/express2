@@ -15,6 +15,7 @@ const state = {
   tcno: '',
   tcError: '',
   formattedPhone: '',
+  maxDate:'',
 };
 
 const mutations = {
@@ -141,7 +142,8 @@ const getters = {
       districts: state.districts,
       tcno: state.tcno,
       tcError: state.tcError,
-      formattedPhone: state.formattedPhone
+      formattedPhone: state.formattedPhone,
+      maxDate: state.maxDate
     };
   }
 };
