@@ -40,14 +40,14 @@
       </div>
       <div class="form-group">
         <label for="sehir">Şehir</label>
-        <select id="sehir" v-model="selectedCity" @change="updateDistricts" required>
+        <select id="sehir" v-model="selectedCity" @change="updateDistricts">
           <option value="" disabled>Şehir Seçin</option>
           <option v-for="city in cities" :key="city" :value="city">{{ city }}</option>
         </select>
       </div>
       <div class="form-group">
         <label for="ilce">İlçe</label>
-        <select id="ilce" v-model="selectedDistrict" required>
+        <select id="ilce" v-model="selectedDistrict">
           <option value="" disabled>İlçe Seçin</option>
           <option v-for="district in districts[selectedCity]" :key="district" :value="district">{{ district }}</option>
         </select>
@@ -62,30 +62,39 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { onMounted } from 'vue';
+import { useUserForm } from '@/composables/UserFormFuncs';
 
 export default {
   setup() {
-    const store = useStore();
+    const {
+      firstName,
+      lastName,
+      birthDate,
+      gender,
+      tcno,
+      formattedPhone,
+      email,
+      selectedCity,
+      selectedDistrict,
+      address,
+      maxDate,
+      handleSubmit,
+      validateName,
+      validateDate,
+      validateTCNo,
+      formatPhone,
+      updateDistricts,
+      cities,
+      setMaxDate,
+    } = useUserForm();
 
-    
-    const firstName = ref('');
-    const lastName = ref('');
-    const birthDate = ref('');
-    const gender = ref('');
-    const tcno = ref('');
-    const formattedPhone = ref('');
-    const email = ref('');
-    const selectedCity = ref('');
-    const selectedDistrict = ref('');
-    const address = ref('');
-    const maxDate = ref(new Date().toISOString().split('T')[0]); 
-    const tcError = ref('');
-    const cities = ref([]);
-    const districts = ref({}); 
+    onMounted(async () => {
+      fetchCities();
+      setMaxDate(); 
+    });
 
-    const handleSubmit = async () => {
+      handleSubmit = async () => {
       const formData = {
         firstName: firstName.value,
         lastName: lastName.value,
@@ -100,35 +109,33 @@ export default {
       };
 
       try {
-        await store.dispatch('User/submitForm', formData);
+        const response = await axios.post('http://localhost:5000/api/users', formData);
+        alert('Form başarıyla gönderildi! ID: ' + response.data._id);
       } catch (error) {
-        console.error('Hata oluştu:', error);
+        console.error('Form gönderilemedi:', error);
+        alert('Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+      }
+    };
+    const fetchCities = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/iller');
+        if (response.data) {
+          cities.value = response.data.map((city) => city.il);
+        }
+      } catch (error) {
+        console.error('Şehirler yüklenemedi:', error);
       }
     };
 
-    const setMaxDate = () => {
-      const today = new Date();
-      maxDate.value = today.toISOString().split('T')[0]; 
-    };
-
-    onMounted(async () => {
-      await store.dispatch('User/fetchCities');
-      setMaxDate();
-    });
-    //eslint-disable-next-line
-    const validateName = (field) => {
-    };
-
-    const validateDate = () => {
-    };
-
-    const validateTCNo = () => {
-    };
-
-    const formatPhone = () => {
-    };
-
-    const updateDistricts = () => {
+     updateDistricts = async () => {
+      try {
+        if (selectedCity.value) {
+          const response = await axios.get(`http://localhost:5000/api/iller/${selectedCity.value}`);
+          districts.value[selectedCity.value] = response.data;
+        }
+      } catch (error) {
+        console.error('İlçeler yüklenemedi:', error);
+      }
     };
 
     return {
@@ -150,8 +157,7 @@ export default {
       formatPhone,
       updateDistricts,
       cities,
-      districts,
-      tcError,
+      fetchCities,
     };
   },
 };

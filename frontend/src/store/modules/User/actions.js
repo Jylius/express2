@@ -1,3 +1,5 @@
+// store/modules/user/actions.js
+
 import axios from 'axios';
 
 export default {
@@ -16,11 +18,15 @@ export default {
   async fetchCities({ commit }) {
     try {
       const response = await axios.get('http://localhost:5000/api/iller');
-      commit('setCities', response.data.map((city) => city.il));
+      if (response.data) { 
+        commit('setCities', response.data.map((city) => city.il)); 
+      }
     } catch (error) {
       console.error('Şehirler yüklenemedi:', error);
+      alert('Şehirler yüklenemedi. Lütfen bağlantınızı kontrol edin.');
     }
   },
+
   async fetchDistricts({ commit }, selectedCity) {
     try {
       const response = await axios.get(`http://localhost:5000/api/iller/${selectedCity}`);

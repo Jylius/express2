@@ -1,6 +1,6 @@
-import actions from './User/actions';
-import mutations from './User/mutations';
-import getters from './User/getters';
+import actions from './user/actions';
+import mutations from './user/mutations';
+import getters from './user/getters';
 
 const state = {
   user: {},
